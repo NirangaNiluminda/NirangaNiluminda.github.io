@@ -1,0 +1,17 @@
+---
+import type { Project } from '../data/projects';
+interface Props { p: Project; eager?: boolean; }
+const { p, eager = false } = Astro.props;
+const style = `--c1:${p.accent[0]};--c2:${p.accent[1]}`;
+---
+{p.cover ? (
+  <>
+    <img src={p.cover.src} alt={p.cover.alt} loading={eager ? 'eager' : 'lazy'} width="1600" height="900" />
+    <div class="shade"></div>
+  </>
+) : (
+  <div class="art" style={style} aria-hidden="true">
+    <div class="orb"></div>
+    <div class="label"><span>{p.context}</span><b>{p.title}</b></div>
+  </div>
+)}

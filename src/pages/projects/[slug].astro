@@ -1,64 +1,137 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { featured, type Project } from '../../data/projects';
+import { projects, type Project } from '../../data/projects';
 
 export function getStaticPaths() {
-  return featured.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+  return projects.map((p, i) => ({
+    params: { slug: p.slug },
+    props: { p, prev: projects[(i - 1 + projects.length) % projects.length], next: projects[(i + 1) % projects.length] },
+  }));
 }
-const { p } = Astro.props as { p: Project };
+const { p, prev, next } = Astro.props as { p: Project; prev: Project; next: Project };
+const style = `--c1:${p.accent[0]};--c2:${p.accent[1]}`;
+
+const sections = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'problem', label: 'The problem' },
+  ...(p.diagram ? [{ id: 'architecture', label: 'Architecture' }] : []),
+  { id: 'how', label: 'How it works' },
+  { id: 'features', label: 'Features' },
+  { id: 'decisions', label: 'Key decisions' },
+  { id: 'stack', label: 'Tech stack' },
+  { id: 'challenges', label: 'Challenges' },
+  { id: 'outcome', label: 'Outcome' },
+  ...(p.gallery?.length ? [{ id: 'gallery', label: 'Gallery' }] : []),
+];
+const n = (id: string) => String(sections.findIndex((s) => s.id === id) + 1).padStart(2, '0');
 ---
-<Base title={p.title} description={p.tagline} mermaid={Boolean(p.diagram)}>
-  <div class="wrap">
-    <section style="border:0">
-      <a class="crumb" href="/#projects">← All projects</a>
-      <p class="eyebrow">{p.context} · {p.year}</p>
-      <h1 style="margin-top:8px">{p.title}</h1>
-      <p class="muted" style="font-size:19px;margin-top:12px;max-width:60ch">{p.tagline}</p>
-
-      <dl class="facts">
-        <div><dt>Role</dt><dd>{p.role}</dd></div>
-        <div><dt>Links</dt><dd>
-          {p.github && <a href={p.github}>Source on GitHub</a>}
-          {p.live && <> · <a href={p.live}>Live demo</a></>}
-        </dd></div>
-      </dl>
-      <ul class="chips" style="margin-top:12px">{p.stack.map((s) => <li>{s}</li>)}</ul>
-
-      <div class="prose">
-        <h2>The problem</h2>
-        <p>{p.problem}</p>
-
-        <h2>How it works</h2>
-        <ul>{p.approach.map((a) => <li>{a}</li>)}</ul>
+<Base title={p.title} description={p.tagline} mermaid={Boolean(p.diagram)} progress>
+  <header class="cs-hero" style={style}>
+    <div class="wrap">
+      <a class="crumb" href="/#work">← All work</a>
+      <div data-reveal><span class="eyebrow">{p.context} · {p.year}</span></div>
+      <h1 data-reveal style="--d:.06s">{p.title}</h1>
+      <p class="tagline" data-reveal style="--d:.12s">{p.tagline}</p>
+      <div class="actions" data-reveal style="--d:.18s">
+        {p.github && <a class="btn primary" href={p.github}>View source on GitHub</a>}
+        {p.live && <a class="btn" href={p.live}>Open live demo ↗</a>}
       </div>
+      <dl class="facts" data-reveal style="--d:.24s">
+        <div class="fact"><dt>Role</dt><dd>{p.role}</dd></div>
+        <div class="fact"><dt>Team</dt><dd>{p.team}</dd></div>
+        <div class="fact"><dt>Year</dt><dd>{p.year}</dd></div>
+        <div class="fact"><dt>Area</dt><dd>{p.categories.join(' · ')}</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="wrap cs-layout">
+    <nav class="toc" aria-label="On this page">
+      <b>On this page</b>
+      {sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}
+    </nav>
+
+    <div class="cs-content">
+      <section id="overview">
+        <h2 data-reveal><span class="num">{n('overview')}</span>Overview</h2>
+        <p class="lead" data-reveal>{p.overview}</p>
+        <div class="metrics" style="margin-top:26px">
+          {p.metrics.map((m, i) => (
+            <div class="metric glow" data-reveal style={`--d:${i * 0.06}s`}><b class="grad-text">{m.value}</b><span>{m.label}</span></div>
+          ))}
+        </div>
+      </section>
+
+      <section id="problem">
+        <h2 data-reveal><span class="num">{n('problem')}</span>The problem</h2>
+        <p class="lead" data-reveal>{p.problem}</p>
+      </section>
 
       {p.diagram && (
-        <div class="diagram" role="img" aria-label={`Architecture diagram of ${p.title}`}>
-          <pre class="mermaid">{p.diagram}</pre>
-        </div>
+        <section id="architecture">
+          <h2 data-reveal><span class="num">{n('architecture')}</span>Architecture</h2>
+          <div class="diagram glow" data-reveal role="img" aria-label={`Architecture of ${p.title}`}><pre class="mermaid">{p.diagram}</pre></div>
+        </section>
       )}
 
-      {p.figures?.map((f) => (
-        <figure>
-          <img src={f.src} alt={f.alt} loading="lazy" width="1600" height="900" />
-          <figcaption>{f.caption}</figcaption>
-        </figure>
-      ))}
+      <section id="how">
+        <h2 data-reveal><span class="num">{n('how')}</span>How it works</h2>
+        <div class="steps">
+          {p.steps.map((s, i) => (
+            <div class="step glow" data-reveal style={`--d:${i * 0.05}s`}>
+              <h3>{s.title}</h3><p>{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <div class="prose"><h2>Key decisions</h2></div>
-      <div class="decisions">
-        {p.decisions.map((d) => (
-          <div class="card"><h3>{d.title}</h3><p>{d.body}</p></div>
-        ))}
-      </div>
+      <section id="features">
+        <h2 data-reveal><span class="num">{n('features')}</span>Features</h2>
+        <ul class="features">{p.features.map((f, i) => <li class="glow" data-reveal style={`--d:${i * 0.04}s`}>{f}</li>)}</ul>
+      </section>
 
-      <div class="prose">
-        <h2>Outcome</h2>
-        <ul>{p.outcome.map((o) => <li>{o}</li>)}</ul>
-        <p style="margin-top:28px">
-          {p.github && <a class="btn primary" href={p.github}>Read the code →</a>}
-        </p>
-      </div>
-    </section>
+      <section id="decisions">
+        <h2 data-reveal><span class="num">{n('decisions')}</span>Key decisions</h2>
+        <div class="cards2">{p.decisions.map((d, i) => <div class="glow" data-reveal style={`--d:${i * 0.06}s`}><h3>{d.title}</h3><p>{d.body}</p></div>)}</div>
+      </section>
+
+      <section id="stack">
+        <h2 data-reveal><span class="num">{n('stack')}</span>Tech stack</h2>
+        <div class="stack-groups">
+          {Object.entries(p.stack).map(([group, items], i) => (
+            <div class="glow" data-reveal style={`--d:${i * 0.05}s`}><h3>{group}</h3><ul class="chips">{items.map((s) => <li class="chip">{s}</li>)}</ul></div>
+          ))}
+        </div>
+      </section>
+
+      <section id="challenges">
+        <h2 data-reveal><span class="num">{n('challenges')}</span>Challenges</h2>
+        <div class="cards2">{p.challenges.map((c, i) => <div class="glow" data-reveal style={`--d:${i * 0.06}s`}><h3>{c.title}</h3><p>{c.body}</p></div>)}</div>
+      </section>
+
+      <section id="outcome">
+        <h2 data-reveal><span class="num">{n('outcome')}</span>Outcome</h2>
+        <ul class="outcome">{p.outcome.map((o) => <li class="glow" data-reveal>{o}</li>)}</ul>
+      </section>
+
+      {p.gallery?.length ? (
+        <section id="gallery">
+          <h2 data-reveal><span class="num">{n('gallery')}</span>Gallery</h2>
+          <div class="gallery">
+            {p.gallery.map((g) => (
+              <figure data-reveal>
+                <a href={g.src} target="_blank" rel="noopener"><img src={g.src} alt={g.alt} loading="lazy" width="1600" height="900" /></a>
+                <figcaption>{g.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <nav class="pager" aria-label="More projects">
+        <a class="glow" href={`/projects/${prev.slug}/`}><small>← Previous</small><b>{prev.title}</b></a>
+        <a class="glow next" href={`/projects/${next.slug}/`}><small>Next →</small><b>{next.title}</b></a>
+      </nav>
+    </div>
   </div>
 </Base>

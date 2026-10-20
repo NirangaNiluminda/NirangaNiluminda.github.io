@@ -1,97 +1,244 @@
 ---
 import Base from '../layouts/Base.astro';
-import { featured, more } from '../data/projects';
+import Cover from '../components/Cover.astro';
+import { projects, featured, minis, type Category } from '../data/projects';
+import { certs } from '../data/certs';
+import { person, roles, stats, marquee, focus, timeline } from '../data/site';
+
+const categories: ('All' | Category)[] = ['All', 'Backend', 'Data', 'DevOps', 'Security', 'AI / ML', 'Hardware'];
+const half = Math.ceil(marquee.length / 2);
+const rowA = marquee.slice(0, half), rowB = marquee.slice(half);
+const icons: Record<string, string> = {
+  'Distributed backends': '<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="10" cy="18" r="1.5"/>',
+  'Data platforms': '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  'Delivery & operations': '<path d="M5 12h14M13 6l6 6-6 6"/><circle cx="5" cy="12" r="2"/>',
+  'Security research': '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/>',
+};
 ---
 <Base title="home" description="Software engineer building secure, distributed systems: event-driven microservices, data platforms, CI/CD and security research. BSc (Hons) Computer Engineering, University of Ruhuna.">
-  <div class="wrap">
-    <section class="hero">
-      <span class="status">Available immediately · software engineering, backend & DevOps roles</span>
-      <h1>I build backend and distributed systems that hold up when things fail.</h1>
-      <p class="lede">
-        Event-driven microservices on Kafka, real-time data platforms on Spark, automated delivery pipelines,
-        and security research combining graph neural networks, post-quantum cryptography and blockchain.
-        BSc (Hons) Computer Engineering, University of Ruhuna (2026, results pending) · GPA 3.80 / 4.00.
-      </p>
-      <div class="actions">
-        <a class="btn primary" href="#projects">See projects</a>
-        <a class="btn" href="/cv/Niranga_Niluminda_CV_Software_Engineer.pdf">CV · Software Engineer</a>
-        <a class="btn" href="/cv/Niranga_Niluminda_CV_DevOps.pdf">CV · DevOps</a>
-        <a class="btn" href="https://github.com/NirangaNiluminda">GitHub</a>
-      </div>
-    </section>
 
-    <section id="projects" aria-labelledby="projects-h">
-      <div class="section-head">
-        <h2 id="projects-h">Featured projects</h2>
-        <span class="muted">All code is public on GitHub</span>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="wrap">
+      <div>
+        <span class="status" data-reveal><span class="dot"></span>Available immediately · software, backend & DevOps roles</span>
+        <h1 data-reveal style="--d:.08s">
+          Hi, I'm <span class="grad-text">Niranga</span>.
+          <span class="line2">I build
+            <span class="rotator" aria-label={roles.join(', ')}>
+              {roles.map((r, i) => <span class={i === 0 ? 'on' : ''} aria-hidden="true">{r}</span>)}
+            </span>
+          </span>
+        </h1>
+        <p class="lede" data-reveal style="--d:.16s">
+          Software engineer focused on systems that stay correct when things fail: event-driven microservices on Kafka,
+          real-time data platforms, automated delivery pipelines, and security research with graph neural networks,
+          post-quantum cryptography and blockchain. BSc (Hons) Computer Engineering, University of Ruhuna.
+        </p>
+        <div class="actions" data-reveal style="--d:.24s">
+          <a class="btn primary" href="#work">Explore my work
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn" href={person.cvSE}>Resume · SE</a>
+          <a class="btn" href={person.cvDevOps}>Resume · DevOps</a>
+        </div>
+        <div class="socials" data-reveal style="--d:.32s">
+          <a href={person.github} aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+          <a href={person.linkedin} aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.5V9h3.6v11.5zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z"/></svg></a>
+          <a href={`mailto:${person.email}`} aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+        </div>
       </div>
-      <div class="grid">
+
+      <div class="system" data-reveal style="--d:.2s" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span>event-driven · live</span></div>
+        <svg viewBox="0 0 420 330">
+          <defs><linearGradient id="flowGrad" x1="0" x2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset=".55" stop-color="#22d3ee"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+          <path class="wire" d="M95 60 C160 60 160 165 205 165"/><path class="flow" d="M95 60 C160 60 160 165 205 165"/>
+          <path class="wire" d="M95 165 L205 165"/><path class="flow d2" d="M95 165 L205 165"/>
+          <path class="wire" d="M95 270 C160 270 160 165 205 165"/><path class="flow d3" d="M95 270 C160 270 160 165 205 165"/>
+          <path class="wire" d="M285 165 C330 165 330 75 360 75"/><path class="flow" d="M285 165 C330 165 330 75 360 75"/>
+          <path class="wire" d="M285 165 L360 165"/><path class="flow d2" d="M285 165 L360 165"/>
+          <path class="wire" d="M285 165 C330 165 330 255 360 255"/><path class="flow d3" d="M285 165 C330 165 330 255 360 255"/>
+          <g class="node"><rect x="10" y="38" width="86" height="44" rx="10"/><text x="22" y="58">producer</text><text class="sub" x="22" y="72">events</text></g>
+          <g class="node"><rect x="10" y="143" width="86" height="44" rx="10"/><text x="22" y="163">outbox</text><text class="sub" x="22" y="177">CDC</text></g>
+          <g class="node"><rect x="10" y="248" width="86" height="44" rx="10"/><text x="22" y="268">meters</text><text class="sub" x="22" y="282">stream</text></g>
+          <g class="node"><rect x="205" y="130" width="80" height="70" rx="14" style="stroke:url(#flowGrad);stroke-width:2"/><text x="222" y="161">Kafka</text><text class="sub" x="222" y="177">3 brokers</text></g>
+          <g class="node"><rect x="360" y="53" width="52" height="44" rx="10"/><text x="368" y="79">SAGA</text></g>
+          <g class="node"><rect x="360" y="143" width="52" height="44" rx="10"/><text x="366" y="169">Spark</text></g>
+          <g class="node"><rect x="360" y="233" width="52" height="44" rx="10"/><text x="370" y="259">DLQ</text></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="stats">
+      {stats.map((s, i) => (
+        <div class="stat glow" data-reveal style={`--d:${i * 0.07}s`}>
+          <b class="grad-text"><span data-count={s.value} data-decimals={s.decimals ?? 0}>{s.decimals ? s.value.toFixed(s.decimals) : s.value}</span>{s.suffix}</b>
+          <span>{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div style="margin-top:72px">
+    <div class="marquee" aria-label="Technologies I use"><div class="track">{[...rowA, ...rowA].map((t) => <span class="chip">{t}</span>)}</div></div>
+    <div class="marquee rev" aria-hidden="true" style="border-top:0"><div class="track">{[...rowB, ...rowB].map((t) => <span class="chip">{t}</span>)}</div></div>
+  </div>
+
+  <!-- ============ ABOUT / BENTO ============ -->
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">// what I do</span>
+        <h2>Systems that hold up <span class="grad-text">under failure</span>.</h2>
+        <p>I care about the hard parts: consistency without distributed transactions, fast answers and exact ones from the same data, pipelines that won't ship broken code, and defences that don't trust the wrong component.</p>
+      </div>
+      <div class="bento">
+        <div class="glow me" data-reveal>
+          <div class="avatar">NN</div>
+          <div>
+            <h3>{person.fullName}</h3>
+            <p style="margin-top:8px">Computer Engineering graduate (GPA 3.80 / 4.00, results pending) from the University of Ruhuna, based in {person.location}. Lead developer on a final-year security research project; six months as a product owner intern at MO Marketplace.</p>
+          </div>
+          <ul class="chips"><li class="chip">Open to remote</li><li class="chip">Available now</li></ul>
+        </div>
+        {focus.map((f, i) => (
+          <div class={`glow ${f.span ?? ''}`} data-reveal style={`--d:${i * 0.06}s`}>
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.title]} /></div>
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+            <ul class="chips">{f.tags.map((t) => <li class="chip">{t}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED WORK ============ -->
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">// featured work</span>
+        <h2>Case studies, <span class="grad-text">explained end to end</span>.</h2>
+        <p>Each one covers the problem, the architecture, the decisions behind it and what came out of it. All code is public.</p>
+      </div>
+      <div class="feature-list">
         {featured.map((p) => (
-          <a class="card" href={`/projects/${p.slug}/`}>
-            <span class="meta">{p.context} · {p.year}</span>
-            <h3>{p.title}</h3>
-            <p>{p.tagline}</p>
-            <ul class="chips">{p.stack.slice(0, 5).map((s) => <li>{s}</li>)}</ul>
-            <span class="more">Read the case study →</span>
+          <a class="feature glow" href={`/projects/${p.slug}/`} data-reveal>
+            <div class="cover"><Cover p={p} /></div>
+            <div class="body">
+              <span class="meta">{p.context} · {p.year} · {p.team}</span>
+              <h3>{p.title}</h3>
+              <p>{p.short}</p>
+              <div class="mini-metrics">
+                {p.metrics.slice(0, 3).map((m) => <div><b class="grad-text">{m.value}</b><span>{m.label}</span></div>)}
+              </div>
+              <ul class="chips">{Object.values(p.stack).flat().slice(0, 5).map((s) => <li class="chip">{s}</li>)}</ul>
+              <span class="cta">Read the case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </div>
           </a>
         ))}
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="more-h">
-      <div class="section-head">
-        <h2 id="more-h">More projects</h2>
+  <!-- ============ ALL PROJECTS ============ -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">// all projects</span>
+        <h2>Everything I've <span class="grad-text">built</span>.</h2>
+        <p>Filter by area. Cards with a case study open a full write-up; the rest link to the code.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter projects" data-reveal>
+        {categories.map((c, i) => <button type="button" data-cat={c} aria-pressed={i === 0 ? 'true' : 'false'}>{c}</button>)}
       </div>
       <div class="grid">
-        {more.map((p) => (
-          <article class="card">
-            <h3>{p.title}</h3>
-            <p>{p.blurb}</p>
-            <ul class="chips">{p.stack.map((s) => <li>{s}</li>)}</ul>
-            {p.github && <a class="more" href={p.github}>Code on GitHub →</a>}
+        {projects.map((p) => (
+          <a class="pcard glow" href={`/projects/${p.slug}/`} data-cats={p.categories.join('|')} data-reveal>
+            <div class="thumb"><Cover p={p} /></div>
+            <div class="inner">
+              <span class="tag">{p.categories.join(' · ')}</span>
+              <h3>{p.title}</h3>
+              <p>{p.short}</p>
+              <div class="foot"><span>Case study →</span><span class="muted" style="font-weight:500">{p.year}</span></div>
+            </div>
+          </a>
+        ))}
+        {minis.map((m) => (
+          <a class="pcard glow" href={m.github} data-cats={m.categories.join('|')} data-reveal>
+            <div class="inner">
+              <span class="tag">{m.categories.join(' · ')}</span>
+              <h3>{m.title}</h3>
+              <p>{m.blurb}</p>
+              <ul class="chips">{m.stack.map((s) => <li class="chip">{s}</li>)}</ul>
+              <div class="foot"><span>Code on GitHub →</span></div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOURNEY ============ -->
+  <section id="journey">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">// journey</span>
+        <h2>Education, experience & <span class="grad-text">achievements</span>.</h2>
+      </div>
+      <div class="timeline">
+        {timeline.map((t, i) => (
+          <div class={`titem glow ${t.kind}`} data-reveal style={`--d:${i * 0.05}s`}>
+            <span class="when">{t.when}</span>
+            <h3>{t.title}</h3>
+            <span class="org">{t.org}</span>
+            <p>{t.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CERTIFICATES ============ -->
+  <section id="certificates">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">// certificates</span>
+        <h2>Learning, <span class="grad-text">verified</span>.</h2>
+        <p>Including the AWS-authorised DevOps on AWS specialization. Coursera certificates link to their public verification pages.</p>
+      </div>
+      <div class="cert-grid">
+        {certs.map((c, i) => (
+          <article class="cert glow" data-reveal style={`--d:${(i % 4) * 0.05}s`}>
+            <div class="img"><img src={c.image} alt={`Certificate: ${c.title}`} loading="lazy" width="640" height="495" /></div>
+            <div class="inner">
+              <span class="tag">{c.group}</span>
+              <h3>{c.title}</h3>
+              <span class="issuer">{c.issuer} · {c.platform}</span>
+              <div class="row"><span class="muted">{c.date}</span>{c.verify && <a href={c.verify}>Verify ↗</a>}</div>
+            </div>
           </article>
         ))}
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="experience" aria-labelledby="exp-h">
-      <div class="section-head"><h2 id="exp-h">Experience & education</h2></div>
-      <div class="rows">
-        <div class="row">
-          <div class="when">May – Nov 2025</div>
-          <div>
-            <h3>Client-side Product Owner (Intern) · MO Marketplace</h3>
-            <ul>
-              <li>Wrote the SQL behind Apache Superset dashboards on the production PostgreSQL schema.</li>
-              <li>Ran UAT and regression testing on every fortnightly mobile release.</li>
-              <li>Wrote PRDs and managed the Jira backlog between stakeholders and engineering.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="row">
-          <div class="when">2021 – 2026</div>
-          <div>
-            <h3>BSc (Hons) Computer Engineering · University of Ruhuna</h3>
-            <ul>
-              <li>GPA 3.80 / 4.00. All final examinations completed September 2026; results pending.</li>
-              <li>Top 10 national finalist, Agentrix 2026 · Top 5 finalist, Eminence.</li>
-            </ul>
-          </div>
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-card" data-reveal>
+        <span class="eyebrow">// let's talk</span>
+        <h2 style="margin-top:14px">Looking for an engineer who <span class="grad-text">ships reliable systems</span>?</h2>
+        <p>I'm open to software engineering, backend and DevOps roles, available immediately, based in {person.location} and happy to work remotely.</p>
+        <div class="actions">
+          <a class="btn primary" href={`mailto:${person.email}`}>{person.email}</a>
+          <a class="btn" href={person.linkedin}>LinkedIn</a>
+          <a class="btn" href={person.github}>GitHub</a>
         </div>
       </div>
-    </section>
-
-    <section id="contact" aria-labelledby="contact-h">
-      <div class="section-head"><h2 id="contact-h">Get in touch</h2></div>
-      <p class="muted" style="max-width:60ch">
-        I'm looking for software engineering, backend and DevOps roles and can start immediately.
-        Based in Galle, Sri Lanka; open to remote work.
-      </p>
-      <div class="actions">
-        <a class="btn primary" href="mailto:niranganiluminda@gmail.com">niranganiluminda@gmail.com</a>
-        <a class="btn" href="https://linkedin.com/in/niranganiluminda">LinkedIn</a>
-        <a class="btn" href="https://github.com/NirangaNiluminda">GitHub</a>
-      </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </Base>
