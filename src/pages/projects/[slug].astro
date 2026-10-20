@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import { featured, type Project } from '../../data/projects';
+
+export function getStaticPaths() {
+  return featured.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props as { p: Project };
+---
+<Base title={p.title} description={p.tagline} mermaid={Boolean(p.diagram)}>
+  <div class="wrap">
+    <section style="border:0">
+      <a class="crumb" href="/#projects">← All projects</a>
+      <p class="eyebrow">{p.context} · {p.year}</p>
+      <h1 style="margin-top:8px">{p.title}</h1>
+      <p class="muted" style="font-size:19px;margin-top:12px;max-width:60ch">{p.tagline}</p>
+
+      <dl class="facts">
+        <div><dt>Role</dt><dd>{p.role}</dd></div>
+        <div><dt>Links</dt><dd>
+          {p.github && <a href={p.github}>Source on GitHub</a>}
+          {p.live && <> · <a href={p.live}>Live demo</a></>}
+        </dd></div>
+      </dl>
+      <ul class="chips" style="margin-top:12px">{p.stack.map((s) => <li>{s}</li>)}</ul>
+
+      <div class="prose">
+        <h2>The problem</h2>
+        <p>{p.problem}</p>
+
+        <h2>How it works</h2>
+        <ul>{p.approach.map((a) => <li>{a}</li>)}</ul>
+      </div>
+
+      {p.diagram && (
+        <div class="diagram" role="img" aria-label={`Architecture diagram of ${p.title}`}>
+          <pre class="mermaid">{p.diagram}</pre>
+        </div>
+      )}
+
+      {p.figures?.map((f) => (
+        <figure>
+          <img src={f.src} alt={f.alt} loading="lazy" width="1600" height="900" />
+          <figcaption>{f.caption}</figcaption>
+        </figure>
+      ))}
+
+      <div class="prose"><h2>Key decisions</h2></div>
+      <div class="decisions">
+        {p.decisions.map((d) => (
+          <div class="card"><h3>{d.title}</h3><p>{d.body}</p></div>
+        ))}
+      </div>
+
+      <div class="prose">
+        <h2>Outcome</h2>
+        <ul>{p.outcome.map((o) => <li>{o}</li>)}</ul>
+        <p style="margin-top:28px">
+          {p.github && <a class="btn primary" href={p.github}>Read the code →</a>}
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>

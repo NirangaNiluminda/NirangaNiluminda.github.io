@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  mermaid?: boolean;
+}
+const { title, description, mermaid = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title === 'home' ? 'Niranga Niluminda · Software Engineer' : `${title} · Niranga Niluminda`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#1f497d" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">Niranga Niluminda</a>
+        <nav class="nav" aria-label="Main">
+          <a href="/#projects">Projects</a>
+          <a class="hide-sm" href="/#experience">Experience</a>
+          <a href="/#contact">Contact</a>
+          <a href="/cv/Niranga_Niluminda_CV_Software_Engineer.pdf">CV</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} G.W. Niranga Niluminda</span>
+        <span>
+          <a href="https://github.com/NirangaNiluminda">GitHub</a> ·
+          <a href="https://linkedin.com/in/niranganiluminda">LinkedIn</a> ·
+          <a href="https://github.com/NirangaNiluminda/NirangaNiluminda.github.io">Source of this site</a>
+        </span>
+      </div>
+    </footer>
+    {mermaid && (
+      <script is:inline type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs';
+        const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral', securityLevel: 'strict' });
+        await mermaid.run({ querySelector: '.diagram pre.mermaid' });
+      </script>
+    )}
+  </body>
+</html>

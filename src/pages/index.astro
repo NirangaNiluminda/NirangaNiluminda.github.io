@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import { featured, more } from '../data/projects';
+---
+<Base title="home" description="Software engineer building secure, distributed systems: event-driven microservices, data platforms, CI/CD and security research. BSc (Hons) Computer Engineering, University of Ruhuna.">
+  <div class="wrap">
+    <section class="hero">
+      <span class="status">Available immediately · software engineering, backend & DevOps roles</span>
+      <h1>I build backend and distributed systems that hold up when things fail.</h1>
+      <p class="lede">
+        Event-driven microservices on Kafka, real-time data platforms on Spark, automated delivery pipelines,
+        and security research combining graph neural networks, post-quantum cryptography and blockchain.
+        BSc (Hons) Computer Engineering, University of Ruhuna (2026, results pending) · GPA 3.80 / 4.00.
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="#projects">See projects</a>
+        <a class="btn" href="/cv/Niranga_Niluminda_CV_Software_Engineer.pdf">CV · Software Engineer</a>
+        <a class="btn" href="/cv/Niranga_Niluminda_CV_DevOps.pdf">CV · DevOps</a>
+        <a class="btn" href="https://github.com/NirangaNiluminda">GitHub</a>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-h">
+      <div class="section-head">
+        <h2 id="projects-h">Featured projects</h2>
+        <span class="muted">All code is public on GitHub</span>
+      </div>
+      <div class="grid">
+        {featured.map((p) => (
+          <a class="card" href={`/projects/${p.slug}/`}>
+            <span class="meta">{p.context} · {p.year}</span>
+            <h3>{p.title}</h3>
+            <p>{p.tagline}</p>
+            <ul class="chips">{p.stack.slice(0, 5).map((s) => <li>{s}</li>)}</ul>
+            <span class="more">Read the case study →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="more-h">
+      <div class="section-head">
+        <h2 id="more-h">More projects</h2>
+      </div>
+      <div class="grid">
+        {more.map((p) => (
+          <article class="card">
+            <h3>{p.title}</h3>
+            <p>{p.blurb}</p>
+            <ul class="chips">{p.stack.map((s) => <li>{s}</li>)}</ul>
+            {p.github && <a class="more" href={p.github}>Code on GitHub →</a>}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="experience" aria-labelledby="exp-h">
+      <div class="section-head"><h2 id="exp-h">Experience & education</h2></div>
+      <div class="rows">
+        <div class="row">
+          <div class="when">May – Nov 2025</div>
+          <div>
+            <h3>Client-side Product Owner (Intern) · MO Marketplace</h3>
+            <ul>
+              <li>Wrote the SQL behind Apache Superset dashboards on the production PostgreSQL schema.</li>
+              <li>Ran UAT and regression testing on every fortnightly mobile release.</li>
+              <li>Wrote PRDs and managed the Jira backlog between stakeholders and engineering.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2021 – 2026</div>
+          <div>
+            <h3>BSc (Hons) Computer Engineering · University of Ruhuna</h3>
+            <ul>
+              <li>GPA 3.80 / 4.00. All final examinations completed September 2026; results pending.</li>
+              <li>Top 10 national finalist, Agentrix 2026 · Top 5 finalist, Eminence.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-h">
+      <div class="section-head"><h2 id="contact-h">Get in touch</h2></div>
+      <p class="muted" style="max-width:60ch">
+        I'm looking for software engineering, backend and DevOps roles and can start immediately.
+        Based in Galle, Sri Lanka; open to remote work.
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:niranganiluminda@gmail.com">niranganiluminda@gmail.com</a>
+        <a class="btn" href="https://linkedin.com/in/niranganiluminda">LinkedIn</a>
+        <a class="btn" href="https://github.com/NirangaNiluminda">GitHub</a>
+      </div>
+    </section>
+  </div>
+</Base>
