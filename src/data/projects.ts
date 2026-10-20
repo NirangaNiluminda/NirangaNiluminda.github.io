@@ -47,6 +47,7 @@ export const projects: Project[] = [
     categories: ['Security', 'AI / ML'],
     featured: true,
     github: gh('MPTD-PQS-SDVN'),
+    cover: { src: '/img/sentinel_map.webp', alt: 'SENTINEL dashboard map: vehicles, roadside units and controllers, with detected attackers highlighted', caption: 'Network replay' },
     metrics: [
       { value: '7', label: 'attack variants detected' },
       { value: '4', label: 'attacker classes, data + control plane' },
@@ -105,6 +106,9 @@ export const projects: Project[] = [
     outcome: [
       'Evaluated against three published baselines and eleven ablation studies, each removing one component.',
       'Detailed results will be published with the accompanying paper.',
+    ],
+    gallery: [
+      { src: '/img/sentinel_replay.webp', alt: 'SENTINEL Network Replay: city map with flagged vehicles and a panel explaining why vehicle V93 was flagged', caption: 'SENTINEL dashboard — Network Replay of an urban attack scenario, with a plain-English explanation of each detection' },
     ],
   },
   {

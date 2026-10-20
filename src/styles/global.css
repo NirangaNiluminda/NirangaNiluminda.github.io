@@ -405,3 +405,6 @@ section { padding: 96px 0; position: relative; }
 :root[data-theme='light'] .btn:not(.primary),
 :root[data-theme='light'] .socials a,
 :root[data-theme='light'] .icon-btn { background: #fff; border-color: rgba(15, 23, 42, 0.22); }
+
+/* profile photo */
+.avatar.photo { width: 132px; height: 132px; border-radius: 30px; object-fit: cover; padding: 3px; background: var(--grad); }
