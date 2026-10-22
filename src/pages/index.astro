@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
 import { projects, featured, minis, type Category } from '../data/projects';
 import { certs } from '../data/certs';
-import { person, roles, stats, marquee, focus, timeline } from '../data/site';
+import { person, roles, stats, marquee, focus, timeline, coursework } from '../data/site';
 
 const categories: ('All' | Category)[] = ['All', 'Backend', 'Data', 'DevOps', 'Security', 'AI / ML', 'Hardware'];
 const half = Math.ceil(marquee.length / 2);
@@ -197,6 +197,12 @@ const icons: Record<string, string> = {
             <span class="org">{t.org}</span>
             <p>{t.body}</p>
           </div>
+        ))}
+      </div>
+      <h3 class="sub-head" data-reveal>Relevant coursework <span>· BSc (Hons) Computer Engineering, University of Ruhuna</span></h3>
+      <div class="stack-groups">
+        {coursework.map((c, i) => (
+          <div class="glow" data-reveal style={`--d:${i * 0.05}s`}><h3>{c.group}</h3><ul class="chips">{c.items.map((s) => <li class="chip">{s}</li>)}</ul></div>
         ))}
       </div>
     </div>

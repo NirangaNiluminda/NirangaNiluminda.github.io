@@ -42,3 +42,11 @@ export const timeline = [
   { when: 'University', title: 'Top 5 finalist', org: 'Eminence, University of Ruhuna', body: 'Also competed in CTF, CodeFest AI Hackathon and Haxtream.', kind: 'award' },
   { when: 'Volunteer', title: 'District Coordinator', org: 'Mehewara Seminar Series', body: 'Organised educational seminars across the district.', kind: 'volunteer' },
 ];
+
+// Module names only: per-module grades stay off the public site (official transcript on request).
+export const coursework = [
+  { group: 'Software engineering', items: ['Software Engineering Principles', 'Object-Oriented Design & Programming', 'Web Application Development', 'Mobile Application Development', 'Software Project (2 semesters)', 'Problem Solving'] },
+  { group: 'Systems & cloud', items: ['Operating Systems', 'Computer Networks', 'Advanced Data Communication', 'Cloud Computing', 'DevOps', 'Computer Architecture'] },
+  { group: 'Data & AI', items: ['Database Systems', 'Machine Learning', 'Artificial Intelligence', 'Computer Vision & Image Processing'] },
+  { group: 'Hardware & foundations', items: ['Embedded Systems', 'Digital Logic Design', 'Hardware Description Languages', 'Discrete Mathematics', 'Probability & Statistics', 'Numerical Methods', 'Research Methodology'] },
+];

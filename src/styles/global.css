@@ -340,6 +340,8 @@ section { padding: 96px 0; position: relative; }
 .cards2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
 .cards2 .glow { padding: 22px 24px; }
 .cards2 h3 { font-size: 17px; } .cards2 p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+.sub-head { font-size: 20px; margin: 56px 0 18px; }
+.sub-head span { color: var(--muted); font: 500 14px var(--sans, inherit); }
 .stack-groups { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .stack-groups .glow { padding: 18px 20px; }
 .stack-groups h3 { font: 600 12px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--faint); margin-bottom: 12px; }
