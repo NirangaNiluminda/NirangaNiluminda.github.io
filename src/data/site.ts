@@ -2,7 +2,7 @@ export const person = {
   name: 'Niranga Niluminda',
   fullName: 'G.W. Niranga Niluminda',
   email: 'niranganiluminda@gmail.com',
-  location: 'Galle, Sri Lanka',
+  location: 'Ratnapura, Sri Lanka',
   github: 'https://github.com/NirangaNiluminda',
   linkedin: 'https://linkedin.com/in/niranganiluminda',
   medium: 'https://medium.com/@niranganiluminda',
@@ -35,9 +35,9 @@ export const focus = [
 ];
 
 export const timeline = [
-  { when: '2021 – 2026', title: 'BSc (Hons) Computer Engineering', org: 'University of Ruhuna', body: 'GPA 3.80 / 4.00. All final examinations completed September 2026; results pending.', kind: 'edu' },
+  { when: '2022 – 2026', title: 'BSc (Hons) Computer Engineering', org: 'University of Ruhuna', body: 'GPA 3.80 / 4.00. All final examinations completed September 2026; results pending.', kind: 'edu' },
   { when: '2026', title: 'Top 10 national finalist', org: 'Agentrix 2026', body: 'Advanced through the preliminary and technical rounds to the national final.', kind: 'award' },
-  { when: 'May – Nov 2025', title: 'Client-side Product Owner (Intern)', org: 'MO Marketplace', body: 'SQL and Apache Superset dashboards on the production PostgreSQL schema; UAT and regression testing on every fortnightly release; PRDs and Jira backlog.', kind: 'work' },
+  { when: 'May – Nov 2025', title: 'Software Engineer | Client-side Product Owner (Intern)', org: 'MO Marketplace', body: 'SQL and Apache Superset dashboards on the production PostgreSQL schema; UAT and regression testing on every fortnightly release; PRDs and Jira backlog.', kind: 'work' },
   { when: 'Competition', title: 'CodeSprint 8 participant', org: 'IEEE Student Branch, IIT', body: 'Team CodeXCrew pitched TwoTapGo, an emergency-response app, in the inter-university startup battle.', kind: 'award' },
   { when: 'University', title: 'Top 5 finalist', org: 'Eminence, University of Ruhuna', body: 'Also competed in CTF, CodeFest AI Hackathon and Haxtream.', kind: 'award' },
   { when: 'Volunteer', title: 'District Coordinator', org: 'Mehewara Seminar Series', body: 'Organised educational seminars across the district.', kind: 'volunteer' },
